@@ -1,0 +1,30 @@
+const connect = require("../../../models/connect");
+const Message = require("../../../models/Message");
+
+module.exports = async function participantMessagePost(req, res) {
+  let user = req.user;
+  if (!user.match) return res.status(403).send("match not found");
+
+  let { text } = req.body;
+
+  try {
+    await connect();
+
+    let newChat = new Message();
+    newChat.text = text;
+    newChat.owner = user._id;
+    newChat.match = user.match._id;
+
+    newChat = await newChat.save();
+
+    res.socket.server.io.to(String(user.match._id)).emit("message", {
+      type: "message-post",
+      data: newChat._doc,
+    });
+
+    res.status(200).send();
+  } catch (err) {
+    console.error(err.message || err);
+    return res.status(500).send(err.message || err);
+  }
+};
