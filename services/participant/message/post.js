@@ -17,9 +17,9 @@ module.exports = async function participantMessagePost(req, res) {
 
     newChat = await newChat.save();
 
-    res.socket.server.io.to(String(user.match._id)).emit("message", {
+    res.socket.server.io.to(String(user.match._id)).emit("private", {
       type: "message-post",
-      data: newChat._doc,
+      data: { ...newChat._doc, owner: user, match: user.match },
     });
 
     res.status(200).send();
