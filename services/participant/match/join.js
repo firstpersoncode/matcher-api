@@ -1,3 +1,5 @@
+const { ObjectId } = require("mongodb");
+const listMatchByCoordinates = require("../../../handlers/listMatchByCoordinates");
 const connect = require("../../../models/connect");
 const Match = require("../../../models/Match");
 
@@ -9,14 +11,24 @@ module.exports = async function participantMatchJoin(req, res) {
 
   try {
     await connect();
-    let match = await Match.findOne({
-      _id: matchRef,
-      completed: false,
-      verified: false,
-      owner: { $ne: user._id },
-      "participants.participant": { $ne: user._id },
-      // end: { $gt: new Date() },
-    });
+    let match;
+    let matches = await listMatchByCoordinates(
+      user.location.coordinates,
+      [
+        {
+          $match: {
+            _id: new ObjectId(matchRef),
+            completed: false,
+            verified: false,
+            owner: { $ne: user._id },
+            "participants.participant": { $ne: user._id },
+          },
+        },
+      ],
+      { limit: 1 }
+    );
+
+    if (matches.length) match = matches[0];
 
     if (!match) return res.status(403).send("match not found");
 
