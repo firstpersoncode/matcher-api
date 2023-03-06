@@ -36,6 +36,7 @@ module.exports = async function participantSignin(req, res) {
     user = await getParticipantMatch(user);
 
     user.type = "participant";
+    delete user.passowrd;
 
     res.status(200).send({ token, user });
   } catch (err) {
