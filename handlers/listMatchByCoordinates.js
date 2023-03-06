@@ -18,6 +18,7 @@ module.exports = async function listMatchByCoordinates(
         spherical: true,
       },
     },
+
     ...filter,
 
     {
@@ -46,6 +47,15 @@ module.exports = async function listMatchByCoordinates(
 
     {
       $lookup: {
+        from: "messages",
+        localField: "announcements",
+        foreignField: "_id",
+        as: "announcements",
+      },
+    },
+
+    {
+      $lookup: {
         from: "participants",
         localField: "participants.participant",
         foreignField: "_id",
@@ -63,6 +73,7 @@ module.exports = async function listMatchByCoordinates(
         location: 1,
         owner: 1,
         provider: 1,
+        announcements: 1,
         distance: 1,
         participants: {
           $map: {
