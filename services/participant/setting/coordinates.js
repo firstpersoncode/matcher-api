@@ -15,6 +15,8 @@ module.exports = async function participantSettingCoordinates(req, res) {
         location: { type: "Point", coordinates },
       }
     );
+
+    res.status(200).send();
   } catch (err) {
     console.error(err.message || err);
     return res.status(500).send(err.message || err);
