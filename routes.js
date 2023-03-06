@@ -9,17 +9,13 @@ const participantMatchDelete = require("./services/participant/match/delete");
 const participantMatchJoin = require("./services/participant/match/join");
 const participantMatchLeave = require("./services/participant/match/leave");
 const participantMatchList = require("./services/participant/match/list");
-const participantMatchOwner = require("./services/participant/match/owner");
 const participantMatchProvider = require("./services/participant/match/provider");
 const participantMatchRemove = require("./services/participant/match/remove");
 const participantMatchUpdate = require("./services/participant/match/update");
 const participantMessageAnnounce = require("./services/participant/message/announce");
-const participantMessageAnnouncement = require("./services/participant/message/announcement");
-const participantMessageChat = require("./services/participant/message/chat");
-const participantMessagePin = require("./services/participant/message/pin");
+const participantMessageList = require("./services/participant/message/list");
 const participantMessagePost = require("./services/participant/message/post");
 const participantMessageUnanounce = require("./services/participant/message/unannounce");
-const participantMessageUnpin = require("./services/participant/message/unpin");
 const participantSettingCoordinates = require("./services/participant/setting/coordinates");
 
 module.exports = (app) => {
@@ -30,7 +26,7 @@ module.exports = (app) => {
     res.status(200).send(req.user)
   );
   app.post("/participant/signin", participantSignin);
-  app.get("/participant/signout", withSession(), participantSignout);
+  app.delete("/participant/signout", withSession(), participantSignout);
   app.post("/participant/signup", participantSignup);
   app.post("/participant/match/create", withSession(), participantMatchCreate);
   app.delete(
@@ -39,31 +35,27 @@ module.exports = (app) => {
     participantMatchDelete
   );
   app.put("/participant/match/join", withSession(), participantMatchJoin);
-  app.get("/participant/match/leave", withSession(), participantMatchLeave);
+  app.put("/participant/match/leave", withSession(), participantMatchLeave);
   app.get("/participant/match/list", participantMatchList);
-  app.get("/participant/match/owner", withSession(), participantMatchOwner);
   app.get(
     "/participant/match/provider",
     withSession(),
     participantMatchProvider
   );
-  app.get("/participant/match/remove", withSession(), participantMatchRemove);
+  app.put("/participant/match/remove", withSession(), participantMatchRemove);
   app.put("/participant/match/update", withSession(), participantMatchUpdate);
-  app.get(
+  app.put(
     "/participant/message/announce",
     withSession(),
     participantMessageAnnounce
   );
-  app.get("/participant/message/announcement", participantMessageAnnouncement);
-  app.get("/participant/message/chat", withSession(), participantMessageChat);
-  app.get("/participant/message/pin", withSession(), participantMessagePin);
+  app.get("/participant/message/list", withSession(), participantMessageList);
   app.post("/participant/message/post", withSession(), participantMessagePost);
-  app.get(
+  app.put(
     "/participant/message/unannounce",
     withSession(),
     participantMessageUnanounce
   );
-  app.get("/participant/message/unpin", withSession(), participantMessageUnpin);
   app.put(
     "/participant/setting/coordinates",
     withSession(),
