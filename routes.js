@@ -21,24 +21,24 @@ const settingCoordinates = require("./services/setting/coordinates");
 module.exports = (app) => {
   // Setup routes, middleware, and handlers
 
-  app.get("/ping", ping);
-  app.get("/session", withSession(), (req, res) =>
+  app.get("/api/v1/ping", ping);
+  app.get("/api/v1/session", withSession(), (req, res) =>
     res.status(200).send(req.user)
   );
-  app.post("/signin", signIn);
-  app.delete("/signout", withSession(), signOut);
-  app.post("/signup", signUp);
-  app.post("/match/create", withSession(), matchCreate);
-  app.delete("/match/delete", withSession(), matchDelete);
-  app.put("/match/join", withSession(), matchJoin);
-  app.put("/match/leave", withSession(), matchLeave);
-  app.get("/match/list", matchList);
-  app.get("/match/provider", withSession(), matchProvider);
-  app.put("/match/remove", withSession(), matchRemove);
-  app.put("/match/update", withSession(), matchUpdate);
-  app.put("/message/announce", withSession(), messageAnnounce);
-  app.get("/message/list", withSession(), messageList);
-  app.post("/message/post", withSession(), messagePost);
-  app.put("/message/unannounce", withSession(), messageUnAnnounce);
-  app.put("/setting/coordinates", withSession(), settingCoordinates);
+  app.post("/api/v1/signin", signIn);
+  app.delete("/api/v1/signout", withSession(), signOut);
+  app.post("/api/v1/signup", signUp);
+  app.post("/api/v1/match/create", withSession(), matchCreate);
+  app.delete("/api/v1/match/delete", withSession(), matchDelete);
+  app.put("/api/v1/match/join", withSession(), matchJoin);
+  app.put("/api/v1/match/leave", withSession(), matchLeave);
+  app.get("/api/v1/match/list", matchList);
+  app.get("/api/v1/match/provider", withSession(), matchProvider);
+  app.put("/api/v1/match/remove", withSession(), matchRemove);
+  app.put("/api/v1/match/update", withSession(), matchUpdate);
+  app.put("/api/v1/message/announce", withSession(), messageAnnounce);
+  app.get("/api/v1/message/list", withSession(), messageList);
+  app.post("/api/v1/message/post", withSession(), messagePost);
+  app.put("/api/v1/message/unannounce", withSession(), messageUnAnnounce);
+  app.put("/api/v1/setting/coordinates", withSession(), settingCoordinates);
 };
