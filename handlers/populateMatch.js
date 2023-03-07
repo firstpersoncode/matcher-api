@@ -1,6 +1,6 @@
 const listMatchByCoordinates = require("./listMatchByCoordinates");
 
-module.exports = async function getParticipantMatch(participant) {
+module.exports = async function populateMatch(participant) {
   if (!participant) return null;
 
   let matches = await listMatchByCoordinates(

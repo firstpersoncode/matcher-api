@@ -9,12 +9,12 @@ const {
   startOfDay,
 } = require("date-fns");
 
-const connect = require("../../../models/connect");
-const Match = require("../../../models/Match");
-const Provider = require("../../../models/Provider");
-const listMatchByCoordinates = require("../../../handlers/listMatchByCoordinates");
+const connect = require("../../models/connect");
+const Match = require("../../models/Match");
+const Provider = require("../../models/Provider");
+const listMatchByCoordinates = require("../../handlers/listMatchByCoordinates");
 
-module.exports = async function participantMatchCreate(req, res) {
+module.exports = async function matchCreate(req, res) {
   let user = req.user;
   if (user.match) return res.status(403).send("already have ongoing match");
 

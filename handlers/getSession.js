@@ -1,9 +1,9 @@
 const { verify } = require("jsonwebtoken");
 
 const Participant = require("../models/Participant");
-const getParticipantMatch = require("./getParticipantMatch");
+const populateMatch = require("./populateMatch");
 
-module.exports = async function getParticipantSession(token) {
+module.exports = async function getSession(token) {
   if (!token) return null;
 
   const decoded = verify(token, process.env.JWT_KEY);
@@ -16,7 +16,7 @@ module.exports = async function getParticipantSession(token) {
 
   user = user.toObject();
 
-  user = await getParticipantMatch(user);
+  user = await populateMatch(user);
 
   user.type = "participant";
 

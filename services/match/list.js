@@ -1,13 +1,13 @@
-const connect = require("../../../models/connect");
-const listMatchByCoordinates = require("../../../handlers/listMatchByCoordinates");
-const getParticipantSession = require("../../../handlers/getParticipantSession");
+const connect = require("../../models/connect");
+const listMatchByCoordinates = require("../../handlers/listMatchByCoordinates");
+const getSession = require("../../handlers/getSession");
 
-module.exports = async function participantMatchList(req, res) {
+module.exports = async function matchList(req, res) {
   let userCoordinates;
 
   try {
     await connect();
-    let user = await getParticipantSession(req.headers.token);
+    let user = await getSession(req.headers.token);
 
     if (!user) {
       let { coords } = req.query;

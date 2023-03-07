@@ -1,7 +1,7 @@
-const connect = require("../../../models/connect");
-const Message = require("../../../models/Message");
+const connect = require("../../models/connect");
+const Message = require("../../models/Message");
 
-module.exports = async function participantMessagePost(req, res) {
+module.exports = async function messagePost(req, res) {
   let user = req.user;
   if (!user.match) return res.status(403).send("match not found");
 

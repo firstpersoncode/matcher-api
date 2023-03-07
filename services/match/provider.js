@@ -1,7 +1,7 @@
-const connect = require("../../../models/connect");
-const Provider = require("../../../models/Provider");
+const connect = require("../../models/connect");
+const Provider = require("../../models/Provider");
 
-module.exports = async function participantMatchProvider(req, res) {
+module.exports = async function matchProvider(req, res) {
   let user = req.user;
 
   let now = new Date();

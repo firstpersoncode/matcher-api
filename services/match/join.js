@@ -1,9 +1,9 @@
 const { ObjectId } = require("mongodb");
-const listMatchByCoordinates = require("../../../handlers/listMatchByCoordinates");
-const connect = require("../../../models/connect");
-const Match = require("../../../models/Match");
+const listMatchByCoordinates = require("../../handlers/listMatchByCoordinates");
+const connect = require("../../models/connect");
+const Match = require("../../models/Match");
 
-module.exports = async function participantMatchJoin(req, res) {
+module.exports = async function matchJoin(req, res) {
   let user = req.user;
   if (user.match) return res.status(403).send("already have ongoing match");
 

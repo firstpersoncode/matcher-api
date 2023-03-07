@@ -1,7 +1,7 @@
-const Match = require("../../../models/Match");
-const Message = require("../../../models/Message");
+const Match = require("../../models/Match");
+const Message = require("../../models/Message");
 
-module.exports = async function participantMatchDelete(req, res) {
+module.exports = async function matchDelete(req, res) {
   let user = req.user;
   if (!user.match) return res.status(403).send("match not found");
   if (!user.matchOwner)

@@ -1,13 +1,13 @@
 const { genSalt, hash } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
-const validateEmail = require("../../utils/validateEmail");
-const connect = require("../../models/connect");
-const getParticipantSession = require("../../handlers/getParticipantSession");
-const Participant = require("../../models/Participant");
+const validateEmail = require("../utils/validateEmail");
+const connect = require("../models/connect");
+const getSession = require("../handlers/getSession");
+const Participant = require("../models/Participant");
 
-module.exports = async function participantSignup(req, res) {
-  const currUser = await getParticipantSession(req.headers.token);
+module.exports = async function signUp(req, res) {
+  const currUser = await getSession(req.headers.token);
   if (currUser) return res.status(403).send("already signed in");
 
   let { name, email, password, address } = req.body;

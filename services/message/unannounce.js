@@ -1,12 +1,12 @@
-const connect = require("../../../models/connect");
-const Match = require("../../../models/Match");
-const Message = require("../../../models/Message");
+const connect = require("../../models/connect");
+const Match = require("../../models/Match");
+const Message = require("../../models/Message");
 
-module.exports = async function participantMessageAnnounce(req, res) {
+module.exports = async function messageUnAnnounce(req, res) {
   let user = req.user;
   if (!user.match) return res.status(403).send("match not found");
   if (!user.matchOwner)
-    return res.status(401).send("only match owner can announce message");
+    return res.status(401).send("only match owner can unannounce message");
 
   let { messageRef } = req.body;
 
@@ -16,7 +16,7 @@ module.exports = async function participantMessageAnnounce(req, res) {
     let message = await Message.findOne({
       _id: messageRef,
       match: user.match._id,
-      type: { $ne: "announcement" },
+      type: "announcement",
     }).populate([
       { path: "owner", select: "name" },
       { path: "match", select: "name" },
@@ -24,16 +24,16 @@ module.exports = async function participantMessageAnnounce(req, res) {
 
     if (!message) return res.status(403).send("message not found");
 
-    message.type = "announcement";
+    message.type = "chat";
     let announcement = await message.save();
 
     await Match.updateOne(
       { _id: user.match._id },
-      { $push: { announcements: messageRef } }
+      { $pull: { announcements: messageRef } }
     );
 
     res.socket.server.io.emit("broadcast", {
-      type: "message-announce",
+      type: "message-unannounce",
       data: { match: user.match, announcement: announcement._doc },
     });
 

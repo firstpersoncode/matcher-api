@@ -1,13 +1,13 @@
 const { compare } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
-const connect = require("../../models/connect");
-const getParticipantSession = require("../../handlers/getParticipantSession");
-const getParticipantMatch = require("../../handlers/getParticipantMatch");
-const Participant = require("../../models/Participant");
+const connect = require("../models/connect");
+const getSession = require("../handlers/getSession");
+const populateMatch = require("../handlers/populateMatch");
+const Participant = require("../models/Participant");
 
-module.exports = async function participantSignin(req, res) {
-  const currUser = await getParticipantSession(req.headers.token);
+module.exports = async function signIn(req, res) {
+  const currUser = await getSession(req.headers.token);
   if (currUser) return res.status(403).send("already signed in");
 
   let { email, password } = req.body;
@@ -33,10 +33,10 @@ module.exports = async function participantSignin(req, res) {
       expiresIn,
     });
 
-    user = await getParticipantMatch(user);
+    user = await populateMatch(user);
 
     user.type = "participant";
-    delete user.passowrd;
+    delete user.password;
 
     res.status(200).send({ token, user });
   } catch (err) {

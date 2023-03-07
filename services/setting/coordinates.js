@@ -1,7 +1,7 @@
-const connect = require("../../../models/connect");
-const Participant = require("../../../models/Participant");
+const connect = require("../../models/connect");
+const Participant = require("../../models/Participant");
 
-module.exports = async function participantSettingCoordinates(req, res) {
+module.exports = async function settingCoordinates(req, res) {
   let user = req.user;
 
   let { coordinates } = req.body;

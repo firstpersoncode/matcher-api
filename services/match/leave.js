@@ -1,7 +1,7 @@
-const connect = require("../../../models/connect");
-const Match = require("../../../models/Match");
+const connect = require("../../models/connect");
+const Match = require("../../models/Match");
 
-module.exports = async function participantMatchLeave(req, res) {
+module.exports = async function matchLeave(req, res) {
   let user = req.user;
   if (!user.match) return res.status(403).send("match not found");
   if (user.matchOwner) return res.status(401).send("owner cannot leave match");

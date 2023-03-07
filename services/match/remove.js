@@ -1,8 +1,8 @@
-const connect = require("../../../models/connect");
-const Match = require("../../../models/Match");
-const Participant = require("../../../models/Participant");
+const connect = require("../../models/connect");
+const Match = require("../../models/Match");
+const Participant = require("../../models/Participant");
 
-module.exports = async function participantMatchRemove(req, res) {
+module.exports = async function matchRemove(req, res) {
   let user = req.user;
   if (!user.match) res.status(403).send("match not found");
   if (!user.matchOwner)
