@@ -4,6 +4,7 @@ const ping = require("./services/ping");
 const signIn = require("./services/signin");
 const signOut = require("./services/signout");
 const signUp = require("./services/signup");
+
 const matchCreate = require("./services/match/create");
 const matchDelete = require("./services/match/delete");
 const matchJoin = require("./services/match/join");
@@ -12,6 +13,11 @@ const matchList = require("./services/match/list");
 const matchProvider = require("./services/match/provider");
 const matchRemove = require("./services/match/remove");
 const matchUpdate = require("./services/match/update");
+const matchUpdateName = require("./services/match/update/name");
+const matchUpdateProvider = require("./services/match/update/provider");
+const matchUpdateSchedule = require("./services/match/update/schedule");
+const matchUpdateParticipant = require("./services/match/update/participant");
+
 const messageAnnounce = require("./services/message/announce");
 const messageList = require("./services/message/list");
 const messagePost = require("./services/message/post");
@@ -36,6 +42,14 @@ module.exports = (app) => {
   app.get("/api/v1/match/provider", withSession(), matchProvider);
   app.put("/api/v1/match/remove", withSession(), matchRemove);
   app.put("/api/v1/match/update", withSession(), matchUpdate);
+  app.put("/api/v1/match/update/name", withSession(), matchUpdateName);
+  app.put("/api/v1/match/update/provider", withSession(), matchUpdateProvider);
+  app.put("/api/v1/match/update/schedule", withSession(), matchUpdateSchedule);
+  app.put(
+    "/api/v1/match/update/participant",
+    withSession(),
+    matchUpdateParticipant
+  );
   app.put("/api/v1/message/announce", withSession(), messageAnnounce);
   app.get("/api/v1/message/list", withSession(), messageList);
   app.post("/api/v1/message/post", withSession(), messagePost);

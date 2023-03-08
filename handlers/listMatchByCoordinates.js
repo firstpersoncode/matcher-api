@@ -105,7 +105,6 @@ module.exports = async function listMatchByCoordinates(
       $project: {
         "owner.password": 0,
         "provider.password": 0,
-        "provider.availabilities": 0,
         "participants.participant.password": 0,
       },
     },
