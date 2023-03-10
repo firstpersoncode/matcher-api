@@ -3,7 +3,7 @@ const Match = require("../../../models/Match");
 const Provider = require("../../../models/Provider");
 const listMatchByCoordinates = require("../../../handlers/listMatchByCoordinates");
 
-module.exports = async function matchUpdate(req, res) {
+module.exports = async function matchUpdateParticipant(req, res) {
   let user = req.user;
   if (!user.match) return res.status(403).send("match not found");
   if (!user.matchOwner)
