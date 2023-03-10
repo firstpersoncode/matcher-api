@@ -14,6 +14,21 @@ const ParticipantSchema = new mongoose.Schema(
       },
       coordinates: { type: [Number], required: false, default: [0, 0] },
     },
+    contacts: [
+      {
+        contact: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Participant",
+          unique: true,
+          required: true,
+        },
+        status: {
+          type: String,
+          enum: ["friend", "waiting-req", "waiting-res"],
+          required: true,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
