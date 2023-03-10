@@ -32,6 +32,7 @@ const MatchSchema = new mongoose.Schema(
         participant: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Participant",
+          unique: true,
           required: true,
         },
         count: { type: Number, required: true },
