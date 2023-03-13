@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
+const randomId = require("../utils/randomId");
 
 const ProviderSchema = new mongoose.Schema(
   {
+    idString: { type: String, unique: true, default: randomId(10) },
     name: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },

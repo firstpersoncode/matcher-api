@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
+const randomId = require("../utils/randomId");
 
 const ParticipantSchema = new mongoose.Schema(
   {
+    idString: { type: String, unique: true, default: randomId(10) },
     name: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
@@ -19,7 +21,6 @@ const ParticipantSchema = new mongoose.Schema(
         contact: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Participant",
-          unique: true,
           required: true,
         },
         status: {
@@ -27,6 +28,12 @@ const ParticipantSchema = new mongoose.Schema(
           enum: ["friend", "waiting-req", "waiting-res"],
           required: true,
         },
+      },
+    ],
+    invitations: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Match",
       },
     ],
   },

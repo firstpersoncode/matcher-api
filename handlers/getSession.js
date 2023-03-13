@@ -8,9 +8,14 @@ module.exports = async function getSession(token) {
 
   const decoded = verify(token, process.env.JWT_KEY);
 
-  let user = await Participant.findOne({ _id: decoded.data }).select({
-    password: 0,
-  });
+  let user = await Participant.findOne({ _id: decoded.data })
+    .select({
+      password: 0,
+    })
+    .populate([
+      { path: "contacts.contact", select: "name email idString" },
+      { path: "invitations", select: "name" },
+    ]);
 
   if (!user) return null;
 

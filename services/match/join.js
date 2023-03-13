@@ -2,6 +2,7 @@ const { ObjectId } = require("mongodb");
 const listMatchByCoordinates = require("../../handlers/listMatchByCoordinates");
 const connect = require("../../models/connect");
 const Match = require("../../models/Match");
+const Participant = require("../../models/Participant");
 
 module.exports = async function matchJoin(req, res) {
   let user = req.user;
@@ -38,18 +39,26 @@ module.exports = async function matchJoin(req, res) {
 
     let remaining = Number(match.count) - totalParticipants;
 
-    if (remaining < 0) return res.status(403).send("invalid participants");
+    if (remaining <= 0) return res.status(403).send("invalid participants");
 
-    await Match.updateOne(
+    let updatedMatch = await Match.findOneAndUpdate(
       {
         _id: match._id,
       },
       { $push: { participants: { participant: user._id, count } } }
-    );
+    ).populate("participants.participant");
+
+    if (user.invitations.length) {
+      await Participant.updateOne({ _id: user._id }, { invitations: [] });
+    }
 
     res.socket.server.io.emit("broadcast", {
       type: "match-join",
-      data: { match, participant: user, count },
+      data: {
+        match: { ...match, participants: updatedMatch.participants },
+        participant: user,
+        count,
+      },
     });
 
     res.status(200).send();

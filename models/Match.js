@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
+const randomId = require("../utils/randomId");
 
 const MatchSchema = new mongoose.Schema(
   {
+    idString: { type: String, unique: true, default: randomId(10) },
     name: { type: String, required: true },
     start: { type: Date, required: true },
     end: { type: Date, required: true },
@@ -32,7 +34,6 @@ const MatchSchema = new mongoose.Schema(
         participant: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Participant",
-          unique: true,
           required: true,
         },
         count: { type: Number, required: true },

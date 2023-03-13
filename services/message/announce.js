@@ -16,7 +16,7 @@ module.exports = async function messageAnnounce(req, res) {
     let message = await Message.findOne({
       _id: messageRef,
       match: user.match._id,
-      type: { $ne: "announcement" },
+      type: "chat",
     }).populate([
       { path: "owner", select: "name" },
       { path: "match", select: "name" },

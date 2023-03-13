@@ -11,16 +11,19 @@ module.exports = async function matchLeave(req, res) {
   try {
     await connect();
 
-    await Match.updateOne(
+    let updatedMatch = await Match.findOneAndUpdate(
       {
         _id: user.match._id,
       },
       { $pull: { participants: { participant: user._id } } }
-    );
+    ).populate("participants.participant");
 
     res.socket.server.io.emit("broadcast", {
       type: "match-leave",
-      data: { match: user.match, participant: user },
+      data: {
+        match: { ...user.match, participants: updatedMatch.participants },
+        participant: user,
+      },
     });
 
     res.status(200).send();

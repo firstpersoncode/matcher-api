@@ -12,6 +12,7 @@ module.exports = async function messagePost(req, res) {
 
     let newChat = new Message();
     newChat.text = text;
+    newChat.type = "chat";
     newChat.owner = user._id;
     newChat.match = user.match._id;
 

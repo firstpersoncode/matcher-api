@@ -1,22 +1,21 @@
 const connect = require("../../models/connect");
 const Message = require("../../models/Message");
 
-module.exports = async function messageList(req, res) {
+module.exports = async function privateMessageList(req, res) {
   let user = req.user;
-  if (!user.match) return res.status(403).send("match not found");
 
   try {
     await connect();
 
-    let chats = await Message.find({
-      match: user.match._id,
-      type: { $in: ["chat", "announcement"] },
+    let privateChats = await Message.find({
+      $or: [{ owner: user._id }, { recipient: user._id }],
+      type: "private-chat",
     }).populate([
       { path: "owner", select: "name" },
-      { path: "match", select: "name" },
+      { path: "recipient", select: "name" },
     ]);
 
-    res.status(200).send(chats);
+    res.status(200).send(privateChats);
   } catch (err) {
     console.error(err.message || err);
     return res.status(500).send(err.message || err);

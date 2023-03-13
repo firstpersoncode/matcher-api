@@ -27,7 +27,7 @@ module.exports = async function matchUpdateParticipant(req, res) {
 
   let remaining = Number(count) - (totalParticipants + pcount);
 
-  if (remaining < 0) return res.status(403).send("invalid participants");
+  if (remaining <= 0) return res.status(403).send("invalid participants");
 
   let now = new Date();
 

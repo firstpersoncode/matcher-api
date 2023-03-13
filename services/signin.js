@@ -17,7 +17,10 @@ module.exports = async function signIn(req, res) {
 
     let user = await Participant.findOne({
       email,
-    });
+    }).populate([
+      { path: "contacts.contact", select: "name email idString" },
+      { path: "invitations", select: "name" },
+    ]);
 
     if (!user) return res.status(404).send("user not found");
 

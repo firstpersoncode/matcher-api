@@ -13,6 +13,7 @@ const connect = require("../../models/connect");
 const Match = require("../../models/Match");
 const Provider = require("../../models/Provider");
 const listMatchByCoordinates = require("../../handlers/listMatchByCoordinates");
+const Participant = require("../../models/Participant");
 
 module.exports = async function matchCreate(req, res) {
   let user = req.user;
@@ -98,6 +99,10 @@ module.exports = async function matchCreate(req, res) {
     );
 
     let match = matches[0];
+
+    if (user.invitations.length) {
+      await Participant.updateOne({ _id: user._id }, { invitations: [] });
+    }
 
     res.socket.server.io.emit("broadcast", {
       type: "match-create",

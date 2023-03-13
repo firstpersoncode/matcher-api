@@ -1,4 +1,5 @@
 const Match = require("../models/Match");
+const Message = require("../models/Message");
 
 module.exports = async function listMatchByCoordinates(
   coordinates,
@@ -73,8 +74,8 @@ module.exports = async function listMatchByCoordinates(
         location: 1,
         owner: 1,
         provider: 1,
-        announcements: 1,
         distance: 1,
+        announcements: 1,
         participants: {
           $map: {
             input: "$participants",
@@ -111,6 +112,20 @@ module.exports = async function listMatchByCoordinates(
     ...(sort ? [{ $sort: sort }] : [{ $sort: { distance: 1 } }]),
     ...(limit ? [{ $limit: limit }] : []),
   ]);
+
+  if (matches.length)
+    for (let match of matches) {
+      if (match.announcements.length) {
+        let populatedAnnouncements = await Message.find({
+          _id: { $in: match.announcements.map((m) => m._id) },
+        }).populate([
+          { path: "owner", select: "name" },
+          { path: "match", select: "name" },
+        ]);
+
+        match.announcements = populatedAnnouncements;
+      } else continue;
+    }
 
   return matches;
 };

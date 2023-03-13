@@ -5,9 +5,8 @@ const MessageSchema = new mongoose.Schema(
     text: { type: String, required: true },
     type: {
       type: String,
-      enum: ["chat", "announcement"],
-      required: false,
-      default: "chat",
+      enum: ["chat", "private-chat", "announcement"],
+      required: true,
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
@@ -17,7 +16,10 @@ const MessageSchema = new mongoose.Schema(
     match: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Match",
-      required: true,
+    },
+    recipient: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Participant",
     },
   },
   { timestamps: true }
