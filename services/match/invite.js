@@ -34,12 +34,24 @@ module.exports = async function matchInvite(req, res) {
 
     participant.invitations.push(user.match._id);
 
-    await participant.save();
+    let invitedParticipant = await participant.save();
 
-    res.socket.server.io.to(String(participantRef)).emit("private", {
-      type: "match-invite",
-      data: user.match,
-    });
+    res.socket.server.io
+      .to(String(invitedParticipant._doc._id))
+      .emit("private", {
+        type: "match-invite",
+        data: user.match,
+      });
+
+    if (invitedParticipant._doc.fcmToken)
+      await res.fcm.admin.messaging().send({
+        token: invitedParticipant._doc.fcmToken,
+        notification: {
+          title: "Match invitation",
+          body: `${user.name} is inviting you to join ${user.match.name}`,
+          // imageUrl: null,
+        },
+      });
 
     res.status(200).send();
   } catch (err) {

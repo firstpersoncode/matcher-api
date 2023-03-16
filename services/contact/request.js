@@ -9,8 +9,7 @@ module.exports = async function contactConfirm(req, res) {
     (item) => String(item.contact._id) === String(contactRef)
   );
 
-  if (alreadyContact)
-    return res.status(403).send("participant already in contact");
+  if (alreadyContact) return res.status(200).send();
 
   try {
     await connect();
@@ -23,11 +22,10 @@ module.exports = async function contactConfirm(req, res) {
     if (!contact) return res.status(404).send("participant not found");
 
     alreadyContact = contact.contacts.find(
-      (item) => String(item.contact)._id === String(user._id)
+      (item) => String(item.contact._id) === String(user._id)
     );
 
-    if (alreadyContact)
-      return res.status(403).send("participant already in contact");
+    if (alreadyContact) return res.status(200).send();
 
     contact.contacts.push({
       contact: user._id,
@@ -55,6 +53,16 @@ module.exports = async function contactConfirm(req, res) {
         data: {
           requester: requester._doc,
           responser: responser._doc,
+        },
+      });
+
+    if (responser._doc.fcmToken)
+      await res.fcm.admin.messaging().send({
+        token: responser._doc.fcmToken,
+        notification: {
+          title: "Friend request",
+          body: `${requester._doc.name} is requesting you to be friend!`,
+          // imageUrl: null,
         },
       });
 

@@ -23,6 +23,18 @@ module.exports = async function messagePost(req, res) {
       data: { ...newChat._doc, owner: user, match: user.match },
     });
 
+    await res.fcm.admin.messaging().sendMulticast({
+      tokens: user.match.participants
+        .filter((p) => p.participant.fcmToken)
+        .map((p) => p.participant.fcmToken),
+      notification: {
+        title: user.match.name,
+        body: `${user.name}: ${text}`,
+        // imageUrl: null,
+      },
+      android: { collapse_key: user.match._id, priority: "normal" },
+    });
+
     res.status(200).send();
   } catch (err) {
     console.error(err.message || err);

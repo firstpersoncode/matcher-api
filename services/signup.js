@@ -10,7 +10,7 @@ module.exports = async function signUp(req, res) {
   const currUser = await getSession(req.headers.token);
   if (currUser) return res.status(403).send("already signed in");
 
-  let { name, email, password, address } = req.body;
+  let { name, email, password, address, fcmToken } = req.body;
 
   if (!validateEmail(email)) return res.status(403).send("invalid email");
 
@@ -25,6 +25,7 @@ module.exports = async function signUp(req, res) {
       email,
       password: encryptedPassword,
       address,
+      fcmToken,
     });
 
     user = await user.save();
@@ -35,6 +36,8 @@ module.exports = async function signUp(req, res) {
     const token = sign({ data: user._id }, process.env.JWT_KEY, {
       expiresIn,
     });
+
+    await Participant.updateOne({ _id: user._id }, { sessionToken: token });
 
     user.type = "participant";
     delete user.password;

@@ -10,7 +10,7 @@ module.exports = async function signIn(req, res) {
   const currUser = await getSession(req.headers.token);
   if (currUser) return res.status(403).send("already signed in");
 
-  let { email, password } = req.body;
+  let { email, password, fcmToken } = req.body;
 
   try {
     await connect();
@@ -24,17 +24,22 @@ module.exports = async function signIn(req, res) {
 
     if (!user) return res.status(404).send("user not found");
 
-    user = user.toObject();
-
     const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) return res.status(403).send("invalid password");
+
+    if (fcmToken !== user.fcmToken) user.fcmToken = fcmToken;
 
     const expiresIn = 60 * 60 * 24 * 7;
 
     const token = sign({ data: user._id }, process.env.JWT_KEY, {
       expiresIn,
     });
+
+    user.sessionToken = token;
+    await user.save();
+
+    user = user.toObject();
 
     user = await populateMatch(user);
 

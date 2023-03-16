@@ -32,6 +32,17 @@ module.exports = async function privateMessagePost(req, res) {
         data: { ...newChat._doc, owner: user, recipient },
       });
 
+    if (recipient.fcmToken)
+      await res.fcm.admin.messaging().send({
+        token: recipient.fcmToken,
+        notification: {
+          title: user.name,
+          body: text,
+          // imageUrl: null,
+        },
+        android: { collapse_key: user._id, priority: "high" },
+      });
+
     res.status(200).send();
   } catch (err) {
     console.error(err.message || err);

@@ -7,6 +7,8 @@ const ParticipantSchema = new mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
+    sessionToken: { type: String, required: false },
+    fcmToken: { type: String, required: false },
     location: {
       type: {
         type: String,

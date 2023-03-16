@@ -19,6 +19,8 @@ module.exports = async function getSession(token) {
 
   if (!user) return null;
 
+  if (user.sessionToken !== token) return null;
+
   user = user.toObject();
 
   user = await populateMatch(user);

@@ -5,6 +5,12 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const express = require("express");
+const admin = require("firebase-admin");
+const serviceAccount = require("./firebase.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 const app = express();
 
@@ -28,6 +34,7 @@ io.on("connection", (socket) => {
 app.use((_, res, next) => {
   res.header("Access-Control-Allow-Credentials", true);
   res.socket.server.io = io;
+  res.fcm = { admin };
   next();
 });
 
