@@ -66,6 +66,7 @@ module.exports = async function listMatchByCoordinates(
     {
       $project: {
         name: 1,
+        idString: 1,
         start: 1,
         end: 1,
         completed: 1,
