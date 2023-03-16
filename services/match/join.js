@@ -33,6 +33,8 @@ module.exports = async function matchJoin(req, res) {
 
     if (!match) return res.status(403).send("match not found");
 
+    if (match.verified) return res.status(403).send("match already verified");
+
     let totalParticipants =
       match.participants.map((p) => p.count).reduce((sum, a) => sum + a, 0) +
       Number(count);
